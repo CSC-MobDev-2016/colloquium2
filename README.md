@@ -8,8 +8,6 @@
  - Task add/edit screen (title, description are fully editable)
  - ListView/RecyclerView and ContentProvider, as usual
  - Tags for tasks (sub-list in detail screen)
- 
-Upd: tags == sub-tasks
 
 ## Extra points
   - Sort by date or name: +3
