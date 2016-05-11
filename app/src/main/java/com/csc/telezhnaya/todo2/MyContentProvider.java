@@ -65,17 +65,24 @@ public class MyContentProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        if (uriMatcher.match(uri) != ENTRY_LIST) {
-            throw new UnsupportedOperationException("Not yet implemented");
-        }
-
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(TaskTable.TABLE_NAME);
-
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        return cursor;
+
+        if (uriMatcher.match(uri) == ENTRY_LIST) {
+            Cursor cursor = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            return cursor;
+        }
+        if (uriMatcher.match(uri) == ENTRY) {
+            long position = ContentUris.parseId(uri);
+            Cursor cursor = builder.query(db, new String[]{TaskTable.COLUMN_DESCRIPTION},
+                    TaskTable._ID + "=?", new String[]{String.valueOf(position)}, null, null, sortOrder);
+
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            return cursor;
+        }
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override

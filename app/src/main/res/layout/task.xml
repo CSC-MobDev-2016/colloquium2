@@ -20,6 +20,12 @@
         android:layout_weight="1"
         android:onClick="onTextClick" />
 
+    <TextView
+        android:id="@+id/creation_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onTextClick" />
+
     <CheckBox
         android:id="@+id/task_done"
         android:layout_width="wrap_content"

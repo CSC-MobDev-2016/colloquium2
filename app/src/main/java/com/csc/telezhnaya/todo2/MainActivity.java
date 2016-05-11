@@ -1,8 +1,6 @@
 package com.csc.telezhnaya.todo2;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,40 +51,42 @@ public class MainActivity extends AppCompatActivity {
 
     public void onTaskChanged(View view) {
         View parent = (View) view.getParent();
-        TextView textView = (TextView) parent.findViewById(R.id.task);
+        TextView taskName = (TextView) parent.findViewById(R.id.task);
         CheckBox checkBox = (CheckBox) parent.findViewById(R.id.task_done);
         ToggleButton star = (ToggleButton) parent.findViewById(R.id.star);
-        manager.updateTask((int) parent.getTag(), textView.getText().toString(), checkBox.isChecked(), star.isChecked());
+        manager.updateTask((int) parent.getTag(), taskName.getText().toString(), null, checkBox.isChecked(), star.isChecked());
     }
 
     public void onTextClick(View view) {
         View parent = (View) view.getParent();
         final int position = (int) parent.getTag();
-        TextView textView = (TextView) parent.findViewById(R.id.task);
+        TextView task = (TextView) parent.findViewById(R.id.task);
         CheckBox checkBox = (CheckBox) parent.findViewById(R.id.task_done);
         ToggleButton toggleButton = (ToggleButton) parent.findViewById(R.id.star);
+        TextView d = (TextView) parent.findViewById(R.id.creation_date);
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final View dialogView = this.getLayoutInflater().inflate(R.layout.edit_task, null);
         dialogBuilder.setView(dialogView);
-        EditText editText = (EditText) dialogView.findViewById(R.id.edit_task);
-        editText.setText(textView.getText().toString());
-        CheckBox done = (CheckBox) dialogView.findViewById(R.id.task_done);
+        final EditText taskName = (EditText) dialogView.findViewById(R.id.task_name);
+        taskName.setText(task.getText().toString());
+        final EditText taskDescription = (EditText) dialogView.findViewById(R.id.task_description);
+        taskDescription.setText(manager.getDescription(position));
+        TextView date = (TextView) dialogView.findViewById(R.id.creation_date);
+        date.setText(d.getText().toString());
+        final CheckBox done = (CheckBox) dialogView.findViewById(R.id.task_done);
         done.setChecked(checkBox.isChecked());
-        ToggleButton star = (ToggleButton) dialogView.findViewById(R.id.star);
+        final ToggleButton star = (ToggleButton) dialogView.findViewById(R.id.star);
         star.setChecked(toggleButton.isChecked());
 
         dialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                EditText editText = (EditText) dialogView.findViewById(R.id.edit_task);
-                CheckBox done = (CheckBox) dialogView.findViewById(R.id.task_done);
-                ToggleButton star = (ToggleButton) dialogView.findViewById(R.id.star);
-
-                String newText = editText.getText().toString();
+                String newText = taskName.getText().toString();
                 if (newText.isEmpty()) {
                     Toast.makeText(getApplicationContext(), R.string.write_smth, Toast.LENGTH_SHORT).show();
                 } else {
-                    manager.updateTask(position, newText, done.isChecked(), star.isChecked());
+                    String newDescription = taskDescription.getText().toString();
+                    manager.updateTask(position, newText, newDescription, done.isChecked(), star.isChecked());
                 }
             }
         });

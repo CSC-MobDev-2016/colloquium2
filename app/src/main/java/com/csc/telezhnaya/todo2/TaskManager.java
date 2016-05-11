@@ -43,11 +43,14 @@ public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                TextView textView = (TextView) view.findViewById(R.id.task);
+                TextView taskName = (TextView) view.findViewById(R.id.task);
                 CheckBox checkBox = (CheckBox) view.findViewById(R.id.task_done);
                 ToggleButton star = (ToggleButton) view.findViewById(R.id.star);
+                TextView taskDate = (TextView) view.findViewById(R.id.creation_date);
 
-                textView.setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TEXT)));
+                taskName.setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TEXT)));
+                Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_DATE)));
+                taskDate.setText(date.toString());
                 boolean done = cursor.getInt(cursor.getColumnIndex(COLUMN_STATUS)) == 1;
                 checkBox.setChecked(done);
                 star.setChecked(cursor.getInt(cursor.getColumnIndex(COLUMN_STARRED)) == 1);
@@ -55,9 +58,11 @@ public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
                 view.setTag(id);
 
                 if (done) {
-                    textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    taskName.setPaintFlags(taskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    taskDate.setPaintFlags(taskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
-                    textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                    taskName.setPaintFlags(taskName.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                    taskDate.setPaintFlags(taskName.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }
             }
         };
@@ -71,6 +76,15 @@ public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
         return adapter;
     }
 
+    public String getDescription(int position) {
+        Cursor cursor = context.getContentResolver().query(ContentUris.withAppendedId(ENTRIES_URI, position),
+                null, null, null, null);
+        cursor.moveToNext();
+        String description = cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_DESCRIPTION));
+        cursor.close();
+        return description;
+    }
+
     public void addTask(String text) {
         long time = new Date().getTime();
         ContentValues values = new ContentValues();
@@ -81,9 +95,12 @@ public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
         context.getContentResolver().insert(ENTRIES_URI, values);
     }
 
-    public void updateTask(int position, String newText, boolean done, boolean starred) {
+    public void updateTask(int position, String newText, String newDescription, boolean done, boolean starred) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TEXT, newText);
+        if (newDescription != null) {
+            values.put(COLUMN_DESCRIPTION, newDescription);
+        }
         values.put(COLUMN_STATUS, done ? 1 : 0);
         values.put(COLUMN_STARRED, starred ? 1 : 0);
         context.getContentResolver().update(ContentUris.withAppendedId(ENTRIES_URI, position),
