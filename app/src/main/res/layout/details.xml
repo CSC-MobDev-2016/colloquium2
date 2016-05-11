@@ -3,19 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
     <TextView
         android:id="@+id/details_header"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
+        android:layout_margin="5dp"
         android:id="@+id/details_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center" >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:text="List tags"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/details_list_tags"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>
