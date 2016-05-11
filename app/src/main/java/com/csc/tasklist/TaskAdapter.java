@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -44,10 +45,12 @@ public class TaskAdapter extends CursorAdapter {
         final CheckBox cbDone = (CheckBox) view.findViewById(R.id.item_task_done);
         final CheckBox cbStar = (CheckBox) view.findViewById(R.id.item_task_star);
         final TextView tvHeader = (TextView) view.findViewById(R.id.item_task_header);
+        final TextView tvDate = (TextView) view.findViewById(R.id.item_task_date);
 
         final int id = cursor.getInt(cursor.getColumnIndex(FeedsTable._ID));
         final String header = cursor.getString(cursor.getColumnIndex(FeedsTable.COLUMN_HEADER));
         final String body = cursor.getString(cursor.getColumnIndex(FeedsTable.COLUMN_BODY));
+        final String date = cursor.getString(cursor.getColumnIndex(FeedsTable.COLUMN_DATE));
         final int done = cursor.getInt(cursor.getColumnIndex(FeedsTable.COLUMN_DONE));
         final int star = cursor.getInt(cursor.getColumnIndex(FeedsTable.COLUMN_STAR));
         final int color = cursor.getInt(cursor.getColumnIndex(FeedsTable.COLUMN_COLOR));
@@ -59,8 +62,10 @@ public class TaskAdapter extends CursorAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     tvHeader.setPaintFlags(paintFlags | Paint.STRIKE_THRU_TEXT_FLAG);
+                    tvDate.setPaintFlags(paintFlags | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
                     tvHeader.setPaintFlags(paintFlags);
+                    tvDate.setPaintFlags(paintFlags);
                 }
                 ContentValues values = new ContentValues();
                 values.put(FeedsTable.COLUMN_DONE, isChecked);
@@ -78,29 +83,19 @@ public class TaskAdapter extends CursorAdapter {
         });
 
         tvHeader.setText(header);
+        tvDate.setText(date);
         if (!cbDone.isChecked()) {
             paintFlags = tvHeader.getPaintFlags();
         }
 
         if (cbDone.isChecked()) {
             tvHeader.setPaintFlags(paintFlags | Paint.STRIKE_THRU_TEXT_FLAG);
+            tvDate.setPaintFlags(paintFlags | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
-        /*new ChromaDialog.Builder()
-                .initialColor(Color.GREEN)
-                .colorMode(ColorMode.RGB) // There's also ARGB and HSV
-                .onColorSelected(new ColorSelectListener() {
-                    @Override
-                    public void onColorSelected(int i) {
-
-                    }
-                })
-                .create()
-                .show(getSupportFragmentManager(), "ChromaDialog");*/  // 3:00 left to sleep. I went to sleep. Sorry :(
-
-        llItemTask.setOnClickListener(new View.OnClickListener() {
+        llItemTask.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(context.getString(R.string.header_alert));
                 final LinearLayout ll = (LinearLayout) activity.getLayoutInflater().inflate(R.layout.task_alert, null);
@@ -135,6 +130,15 @@ public class TaskAdapter extends CursorAdapter {
                 });
 
                 builder.show();
+                return true;
+            }
+        });
+        llItemTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, DetailsActivity.class);
+                intent.putExtra(GlobalContext.TASK_ID, String.valueOf(id));
+                activity.startActivity(intent);
             }
         });
 

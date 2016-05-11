@@ -17,10 +17,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp" />
+    <TextView
+        android:id="@+id/item_task_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/item_task_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp" />
+
+
 </LinearLayout>

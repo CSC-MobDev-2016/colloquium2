@@ -19,10 +19,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.Calendar;
 
@@ -34,15 +37,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private Button btnAddTask;
     Cursor cursor;
     TaskAdapter taskAdapter;
+    Spinner spinnerSorted;
     public static final Uri ENTRIES_URI = Uri.withAppendedPath(ReaderContentProvider.CONTENT_URI, "entries");
-
+    String[] data = { "Name", "Date" };
+    int pos = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.main);
+        spinnerSorted = (Spinner) findViewById(R.id.spinner_sorted);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
+        spinnerSorted.setAdapter(adapter);
+        spinnerSorted.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+                getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnAddTask = (Button) findViewById(R.id.add_task);
         btnAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, ENTRIES_URI, null, null, null,  FeedsTable.COLUMN_DONE + ", " + FeedsTable.COLUMN_STAR + " DESC, " + FeedsTable.COLUMN_DATE + " DESC");
+        return new CursorLoader(this, ENTRIES_URI, null, null, null,   FeedsTable.COLUMN_DONE + ", " + FeedsTable.COLUMN_STAR + " DESC, " + (pos == 0 ? FeedsTable.COLUMN_HEADER : FeedsTable.COLUMN_DATE + " DESC"));
     }
 
     @Override

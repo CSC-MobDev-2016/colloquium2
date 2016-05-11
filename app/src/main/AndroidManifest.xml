@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".DetailsActivity" />
+
         <provider
             android:name=".ReaderContentProvider"
             android:authorities="com.csc.tasklist"
