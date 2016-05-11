@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true" >
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:orientation="horizontal"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_gravity="center_horizontal"
+                          android:paddingBottom="10dp"
+                          android:paddingLeft="10dp"
+                          android:paddingRight="10dp" android:weightSum="1">
+
+                <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="0.9">
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:layout_gravity="center"
+                            android:paddingLeft="5dp" android:paddingRight="10dp">
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/title" android:layout_gravity="left|center" android:paddingTop="5dp"
+                                android:textSize="20dp"/>
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:id="@+id/dateView" android:layout_gravity="right" android:gravity="right"/>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="0.1">
+                    <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:id="@+id/star" android:src="@drawable/emptystar" android:scaleType="fitXY"
+                            android:layout_gravity="center_vertical" android:tint="#ffbf00" android:clickable="true"
+                            android:cropToPadding="false" android:layout_alignParentTop="false"
+                            android:layout_centerInParent="true" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text=""
+                android:id="@+id/description" android:paddingLeft="15dp" android:paddingTop="5dp"
+                android:paddingRight="15dp"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text=""
+                android:id="@+id/tag" android:paddingLeft="15dp" android:paddingTop="5dp" android:paddingRight="15dp"/>
+    </LinearLayout>
+
+</LinearLayout>
