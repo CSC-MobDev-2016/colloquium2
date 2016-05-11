@@ -11,4 +11,8 @@ interface FeedsTable extends BaseColumns {
     String COLUMN_DONE = "CDONE";
     String COLUMN_STAR = "CSTAR";
     String COLUMN_COLOR = "CCOLOR";
+
+    String TAGS_TABLE = "TTAGSLIST";
+    String TAGS_COLUMN_TASKID = "CTASKID";
+    String TAGS_COLUMN_BODY = "CBODY";
 }

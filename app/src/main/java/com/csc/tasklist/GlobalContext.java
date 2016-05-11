@@ -1,5 +1,7 @@
 package com.csc.tasklist;
 
+import android.net.Uri;
+
 /**
  * Created by Oleg Doronin
  * colloquium2
@@ -7,4 +9,5 @@ package com.csc.tasklist;
  */
 public class GlobalContext {
     public static final String TASK_ID = "TASK_ID";
+    public static final Uri TAGS_URI = Uri.withAppendedPath(ReaderContentProvider.CONTENT_URI, "tags");
 }
