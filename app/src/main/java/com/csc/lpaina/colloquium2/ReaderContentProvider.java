@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 
 public class ReaderContentProvider extends ContentProvider {
@@ -20,6 +21,7 @@ public class ReaderContentProvider extends ContentProvider {
     private static final int ENTRIES_ID = 2;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final String TAG = "ContentProvider";
 
     static {
         uriMatcher.addURI(AUTHORITY, "/entries", ENTRIES);
@@ -46,9 +48,10 @@ public class ReaderContentProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         int match = uriMatcher.match(uri);
         String tableName;
+        Log.d(TAG, "insert: match = " + match);
         switch (match) {
             case ENTRIES:
-                tableName = FeedsTable.TABLE_NAME;
+                tableName = TodoTable.TABLE_NAME;
                 break;
             case ENTRIES_ID:
             default:
@@ -73,13 +76,13 @@ public class ReaderContentProvider extends ContentProvider {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         switch (match) {
             case ENTRIES:
-                builder.setTables(FeedsTable.TABLE_NAME);
+                builder.setTables(TodoTable.TABLE_NAME);
                 break;
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
         if (sortOrder == null || sortOrder.isEmpty()) {
-            sortOrder = FeedsTable.COLUMN_STATUS + ", " + FeedsTable.COLUMN_RANGE + " ASC";
+            sortOrder = TodoTable.COLUMN_STATUS + ", " + TodoTable.COLUMN_RANGE + " ASC";
         }
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
@@ -95,16 +98,16 @@ public class ReaderContentProvider extends ContentProvider {
             case ENTRIES_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    selection = FeedsTable._ID + " = " + id;
+                    selection = TodoTable._ID + " = " + id;
                 } else {
-                    selection = selection + " AND " + FeedsTable._ID + " = " + id;
+                    selection = selection + " AND " + TodoTable._ID + " = " + id;
                 }
                 break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
         SQLiteDatabase db = helper.getWritableDatabase();
-        int cnt = db.update(FeedsTable.TABLE_NAME, values, selection, selectionArgs);
+        int cnt = db.update(TodoTable.TABLE_NAME, values, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
     }

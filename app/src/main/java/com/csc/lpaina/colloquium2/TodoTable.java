@@ -2,7 +2,7 @@ package com.csc.lpaina.colloquium2;
 
 import android.provider.BaseColumns;
 
-interface FeedsTable extends BaseColumns {
+interface TodoTable extends BaseColumns {
     String TABLE_NAME = "todo";
 
     String COLUMN_TITLE = "title";

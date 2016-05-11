@@ -28,6 +28,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CardViewHolder> {
             cursor.close();
         }
         cursor = newCursor;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -44,15 +45,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CardViewHolder> {
     @Override
     public void onBindViewHolder(CardViewHolder cardViewHolder, int i) {
         if (cursor.moveToPosition(i)) {
-            cardViewHolder.title = cursor.getString(cursor.getColumnIndex(FeedsTable.COLUMN_TITLE));
-            cardViewHolder.description = cursor.getString(cursor.getColumnIndex(FeedsTable.COLUMN_DESCRIPTION));
-            cardViewHolder.checked = cursor.getInt(cursor.getColumnIndex(FeedsTable.COLUMN_STATUS)) > 0;
-            cardViewHolder.range = cursor.getInt(cursor.getColumnIndex(FeedsTable.COLUMN_RANGE));
+            cardViewHolder.title = cursor.getString(cursor.getColumnIndex(TodoTable.COLUMN_TITLE));
+            cardViewHolder.description = cursor.getString(cursor.getColumnIndex(TodoTable.COLUMN_DESCRIPTION));
+            cardViewHolder.checked = cursor.getInt(cursor.getColumnIndex(TodoTable.COLUMN_STATUS)) > 0;
+            cardViewHolder.range = cursor.getInt(cursor.getColumnIndex(TodoTable.COLUMN_RANGE));
 
             cardViewHolder.textViewTitle.setText(cardViewHolder.title);
             cardViewHolder.textViewDescription.setText(cardViewHolder.description);
             cardViewHolder.checkBox.setChecked(cardViewHolder.checked);
-            int star = cursor.getInt(cursor.getColumnIndex(FeedsTable.COLUMN_RANGE));
+            int star = cursor.getInt(cursor.getColumnIndex(TodoTable.COLUMN_RANGE));
             int color;
             switch (star) {
                 case 0:
@@ -70,7 +71,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CardViewHolder> {
             }
 
             cardViewHolder.cardView.setCardBackgroundColor(color);
-            cardViewHolder.id = cursor.getInt(cursor.getColumnIndex(FeedsTable._ID));
+            cardViewHolder.id = cursor.getInt(cursor.getColumnIndex(TodoTable._ID));
         }
     }
 
@@ -122,17 +123,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CardViewHolder> {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             ContentValues values = new ContentValues();
-            values.put(FeedsTable.COLUMN_TITLE, title);
-            values.put(FeedsTable.COLUMN_DESCRIPTION, description);
-            values.put(FeedsTable.COLUMN_RANGE, range);
+            values.put(TodoTable.COLUMN_TITLE, title);
+            values.put(TodoTable.COLUMN_DESCRIPTION, description);
+            values.put(TodoTable.COLUMN_RANGE, range);
             if (isChecked) {
-                values.put(FeedsTable.COLUMN_STATUS, 1);
+                values.put(TodoTable.COLUMN_STATUS, 1);
             } else {
-                values.put(FeedsTable.COLUMN_STATUS, -1);
+                values.put(TodoTable.COLUMN_STATUS, -1);
             }
 
             context.getContentResolver().update(ContentUris.withAppendedId(MainActivity.ENTRIES_URI, id), values,
-                    FeedsTable._ID + "=?", new String[]{String.valueOf(id)});
+                    TodoTable._ID + "=?", new String[]{String.valueOf(id)});
         }
     }
 

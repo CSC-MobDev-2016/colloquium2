@@ -44,17 +44,17 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         ContentValues values = new ContentValues();
-        values.put(FeedsTable.COLUMN_TITLE, textViewTitle.getText().toString());
-        values.put(FeedsTable.COLUMN_DESCRIPTION, textViewDescription.getText().toString());
-        values.put(FeedsTable.COLUMN_RANGE, (int) ratingBar.getRating());
+        values.put(TodoTable.COLUMN_TITLE, textViewTitle.getText().toString());
+        values.put(TodoTable.COLUMN_DESCRIPTION, textViewDescription.getText().toString());
+        values.put(TodoTable.COLUMN_RANGE, (int) ratingBar.getRating());
         if (checkBox.isChecked()) {
-            values.put(FeedsTable.COLUMN_STATUS, 1);
+            values.put(TodoTable.COLUMN_STATUS, 1);
         } else {
-            values.put(FeedsTable.COLUMN_STATUS, -1);
+            values.put(TodoTable.COLUMN_STATUS, -1);
         }
 
         getContentResolver().update(ContentUris.withAppendedId(MainActivity.ENTRIES_URI, columnId), values,
-                FeedsTable._ID + "=?", new String[]{String.valueOf(columnId)});
+                TodoTable._ID + "=?", new String[]{String.valueOf(columnId)});
         finish();
     }
 
