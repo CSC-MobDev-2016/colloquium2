@@ -11,6 +11,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,37 +54,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             }
         }
 
-        Button btnAddTag = (Button) findViewById(R.id.details_tag_add);
-        btnAddTag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailsActivity.this);
-                builder.setTitle(getString(R.string.header_tag_alert));
-                final LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(R.layout.tag_alert, null);
-                builder.setView(ll);
-
-                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ContentValues values = new ContentValues();
-                        String header = ((EditText) ll.findViewById(R.id.alert_tag_body)).getText().toString();
-                        values.put(FeedsTable.TAGS_COLUMN_BODY, header);
-                        values.put(FeedsTable.TAGS_COLUMN_TASKID, taskId);
-                        getContentResolver().insert(GlobalContext.TAGS_URI, values);
-                    }
-                });
-
-                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
-            }
-        });
-
         ListView listTasks = (ListView) findViewById(R.id.details_list_tags);
         tagAdapter = new TagAdapter(this, null, this);
         listTasks.setAdapter(tagAdapter);
@@ -107,5 +78,45 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         tagAdapter.swapCursor(null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailsActivity.this);
+                builder.setTitle(getString(R.string.header_tag_alert));
+                final LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(R.layout.tag_alert, null);
+                builder.setView(ll);
+
+                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ContentValues values = new ContentValues();
+                        String header = ((EditText) ll.findViewById(R.id.alert_tag_body)).getText().toString();
+                        values.put(FeedsTable.TAGS_COLUMN_BODY, header);
+                        values.put(FeedsTable.TAGS_COLUMN_TASKID, taskId);
+                        getContentResolver().insert(GlobalContext.TAGS_URI, values);
+                    }
+                });
+
+                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 }

@@ -17,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,6 +28,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -34,10 +37,7 @@ import me.priyesh.chroma.ColorMode;
 import me.priyesh.chroma.ColorSelectListener;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private Button btnAddTask;
-    Cursor cursor;
     TaskAdapter taskAdapter;
-    Spinner spinnerSorted;
     public static final Uri ENTRIES_URI = Uri.withAppendedPath(ReaderContentProvider.CONTENT_URI, "entries");
     String[] data = { "Name", "Date" };
     int pos = 0;
@@ -47,26 +47,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        spinnerSorted = (Spinner) findViewById(R.id.spinner_sorted);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
-        spinnerSorted.setAdapter(adapter);
-        spinnerSorted.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                pos = position;
-                getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
-            }
+        ListView listTasks = (ListView) findViewById(R.id.list_tasks);
+        taskAdapter = new TaskAdapter(this, null, this);
+        listTasks.setAdapter(taskAdapter);
+        getSupportLoaderManager().initLoader(0, null, this);
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        btnAddTask = (Button) findViewById(R.id.add_task);
-        btnAddTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_very_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(getString(R.string.header_alert));
                 final LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(R.layout.task_alert, null);
@@ -93,13 +88,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 });
 
                 builder.show();
-            }
-        });
-
-        ListView listTasks = (ListView) findViewById(R.id.list_tasks);
-        taskAdapter = new TaskAdapter(this, null, this);
-        listTasks.setAdapter(taskAdapter);
-        getSupportLoaderManager().initLoader(0, null, this);
+                break;
+            case R.id.action_by_date:
+                pos = 1;
+                getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
+                break;
+            case R.id.action_by_name:
+                pos = 0;
+                getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
