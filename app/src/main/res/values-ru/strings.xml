@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Список дел</string>
+    <string name="add_task_title">Название новой задачи</string>
+    <string name="add_task_desc">Описание новой задачи</string>
+    <string name="add_task_button">Создать новую задачу</string>
+    <string name="add_task_tags">Тэги к заданию</string>
+    <string name="empty_fields">Заполните все поля</string>
+    <string name="button_done">Выполнено!</string>
+    <string name="tags_hint">Введите тэги через запятую</string>
+    <string name="create_task_button">Создать новую задачу</string>
+    <string name="mark_as_favourite_task">Отметить как избранную</string>
+    <string name="add_tag">Добавить тэг</string>
+    <string name="button_update">Обновить задачу</string>
+</resources>

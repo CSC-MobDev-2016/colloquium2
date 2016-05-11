@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">colloquium2</string>
+    <string name="app_name">ToDo List</string>
+    <string name="add_task_title">Title of new task</string>
+    <string name="add_task_desc">Description of a new task</string>
+    <string name="add_task_button">Create new task</string>
+    <string name="add_task_tags">Tags</string>
+    <string name="empty_fields">Please fill all fields</string>
+    <string name="button_done">Done!</string>
+    <string name="title_activity_create_task">CreateTaskActivity</string>
+    <string name="tags_hint">Enter tags devided by column</string>
+    <string name="create_task_button">Create new task</string>
+    <string name="mark_as_favourite_task">Mark as favourite task</string>
+    <string name="add_tag">Add Tag</string>
+    <string name="button_update">Update task</string>
 </resources>

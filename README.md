@@ -1,17 +1,20 @@
-# TODO-list
-Напишите TODO-list
+# To-do list
+Напишите список задач.
 
-## Фичи для второй части  
- - Tasks: 9 points
- - Task list screen (title and creation date)
- - Task details screen (title, description)
- - Task add/edit screen (title, description are fully editable)
- - ListView/RecyclerView and ContentProvider, as usual
- - Tags for tasks (sub-list in detail screen)
+## Base features
+ - Поле ввода для создания новой задачи и список задач на одном экране
+ - Просмотр задачи по клику с возможностью пометить выполненной и редактированием текста 
+ - Задачи сортируются по дате создания, выполненные опускаются в конец списка и зачёркиваются  
+ - Для чтения из ContentProvider-а используйте ListView+CursorAdapter либо RecyclerView+кастомный адаптер и обязательно CursorLoader
+ - Не забывайте про имя пакета, иконку и локализацию + параметры для EditText-а
 
 ## Extra points
-  - Sort by date or name: +3
-  - Important: +3
+ - Возможность пометить задачу выполненной в один клик из списка (чекбокс)
+ - Выбор цвета и отображение в списке (например, фоном)
+ - Избранные задачи (помечаются звёздочкой и сортируются в начало списка)
+
+## Penalty
+ - Все предыдущие
 
 ## Deadline
-11.05.2016 19:20
+11.04.2016 14:00
