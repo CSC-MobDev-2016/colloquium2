@@ -6,4 +6,6 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="input_title">Input new task…</string>
+    <string name="add_tag">Add tag</string>
+    <string name="hint_tag">Input tag</string>
 </resources>

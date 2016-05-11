@@ -50,9 +50,34 @@
         android:id="@+id/edit_description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="1"
         android:hint="@string/description"
         android:textSize="@dimen/middle_text" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5">
+
+        <LinearLayout
+            android:id="@+id/ll_tags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_tag" />
+
+            <Button
+                android:id="@+id/add_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_tag" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="wrap_content"

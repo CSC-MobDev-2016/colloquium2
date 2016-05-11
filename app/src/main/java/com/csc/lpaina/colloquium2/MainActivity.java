@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     public static final Uri ENTRIES_URI = Uri.withAppendedPath(ReaderContentProvider.CONTENT_URI, "entries");
+    public static final Uri TAGS_URI = Uri.withAppendedPath(ReaderContentProvider.CONTENT_URI, "tags");
     private static final String TAG = "MainActivity";
     private final int ENTRIES_LOADER = 1;
 

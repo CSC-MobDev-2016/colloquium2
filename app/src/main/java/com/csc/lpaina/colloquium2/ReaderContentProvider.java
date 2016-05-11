@@ -19,6 +19,7 @@ public class ReaderContentProvider extends ContentProvider {
 
     private static final int ENTRIES = 1;
     private static final int ENTRIES_ID = 2;
+    private static final int TAGS = 3;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private static final String TAG = "ContentProvider";
@@ -26,6 +27,7 @@ public class ReaderContentProvider extends ContentProvider {
     static {
         uriMatcher.addURI(AUTHORITY, "/entries", ENTRIES);
         uriMatcher.addURI(AUTHORITY, "/entries/#", ENTRIES_ID);
+        uriMatcher.addURI(AUTHORITY, "/tags", TAGS);
     }
 
     private ReaderOpenHelper helper;
@@ -36,7 +38,19 @@ public class ReaderContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        int match = uriMatcher.match(uri);
+        String tableName;
+        Log.d(TAG, "delete: match = " + match);
+        switch (match) {
+            case TAGS:
+                tableName = TagTable.TABLE_NAME;
+                break;
+            default:
+                throw new UnsupportedOperationException("Not yet implemented");
+        }
+        int rowId = helper.getWritableDatabase().delete(tableName, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowId;
     }
 
     @Override
@@ -53,7 +67,9 @@ public class ReaderContentProvider extends ContentProvider {
             case ENTRIES:
                 tableName = TodoTable.TABLE_NAME;
                 break;
-            case ENTRIES_ID:
+            case TAGS:
+                tableName = TagTable.TABLE_NAME;
+                break;
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -77,13 +93,17 @@ public class ReaderContentProvider extends ContentProvider {
         switch (match) {
             case ENTRIES:
                 builder.setTables(TodoTable.TABLE_NAME);
+                if (sortOrder == null || sortOrder.isEmpty()) {
+                    sortOrder = TodoTable.COLUMN_STATUS + ", " + TodoTable.COLUMN_RANGE + " ASC";
+                }
+                break;
+            case TAGS:
+                builder.setTables(TagTable.TABLE_NAME);
                 break;
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
-        if (sortOrder == null || sortOrder.isEmpty()) {
-            sortOrder = TodoTable.COLUMN_STATUS + ", " + TodoTable.COLUMN_RANGE + " ASC";
-        }
+
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
