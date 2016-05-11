@@ -105,6 +105,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 values.put(TaskTable.COLUMN_DATE, date);
                 values.put(TaskTable.COLUMN_DONE, done);
                 values.put(TaskTable.COLUMN_STARRED, starred);
+                taskTitle.setText(newTitle);
 
                 getContext().getContentResolver().update(
                     Uri.withAppendedPath(ItemListActivity.TASK_ENTRIES_URI, id),
@@ -123,7 +124,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
           editNoteContent.setText(content);
 
           new AlertDialog.Builder(getContext())
-              .setTitle("Title")
+              .setTitle("Description")
               .setView(editNoteContent)
               .setPositiveButton("Save", (dialog, which) -> {
                 String newContent = editNoteContent.getText().toString();
@@ -133,6 +134,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 values.put(TaskTable.COLUMN_DATE, date);
                 values.put(TaskTable.COLUMN_DONE, done);
                 values.put(TaskTable.COLUMN_STARRED, starred);
+                taskContent.setText(newContent);
 
                 getContext().getContentResolver().update(
                     Uri.withAppendedPath(ItemListActivity.TASK_ENTRIES_URI, id),
