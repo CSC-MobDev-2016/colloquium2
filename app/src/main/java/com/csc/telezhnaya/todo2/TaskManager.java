@@ -23,7 +23,7 @@ import static com.csc.telezhnaya.todo2.MyContentProvider.*;
 import static com.csc.telezhnaya.todo2.TaskTable.*;
 
 public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String DB_ORDER = TaskTable.COLUMN_STARRED + " DESC, " +
+    public static final String TASK_ORDER = TaskTable.COLUMN_STARRED + " DESC, " +
             TaskTable.COLUMN_STATUS + ", " + TaskTable.COLUMN_DATE;
     public static final TaskManager INSTANCE = new TaskManager();
     private CursorAdapter adapter;
@@ -77,7 +77,7 @@ public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     public String getDescription(int position) {
-        Cursor cursor = context.getContentResolver().query(ContentUris.withAppendedId(ENTRIES_URI, position),
+        Cursor cursor = context.getContentResolver().query(ContentUris.withAppendedId(TASKS_URI, position),
                 null, null, null, null);
         cursor.moveToNext();
         String description = cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_DESCRIPTION));
@@ -92,7 +92,7 @@ public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
         values.put(COLUMN_DATE, time);
         values.put(COLUMN_STATUS, 0);
         values.put(COLUMN_STARRED, 0);
-        context.getContentResolver().insert(ENTRIES_URI, values);
+        context.getContentResolver().insert(TASKS_URI, values);
     }
 
     public void updateTask(int position, String newText, String newDescription, boolean done, boolean starred) {
@@ -103,13 +103,13 @@ public class TaskManager implements LoaderManager.LoaderCallbacks<Cursor> {
         }
         values.put(COLUMN_STATUS, done ? 1 : 0);
         values.put(COLUMN_STARRED, starred ? 1 : 0);
-        context.getContentResolver().update(ContentUris.withAppendedId(ENTRIES_URI, position),
+        context.getContentResolver().update(ContentUris.withAppendedId(TASKS_URI, position),
                 values, TaskTable._ID + "=?", new String[]{String.valueOf(position)});
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(context, ENTRIES_URI, null, null, null, TaskManager.DB_ORDER);
+        return new CursorLoader(context, TASKS_URI, null, null, null, TaskManager.TASK_ORDER);
     }
 
     @Override

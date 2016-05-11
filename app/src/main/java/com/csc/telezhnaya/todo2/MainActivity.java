@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -12,13 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import java.util.Date;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    private final TaskManager manager = TaskManager.INSTANCE;
+    private final TaskManager taskManager = TaskManager.INSTANCE;
 
     @Bind(R.id.list)
     ListView listView;
@@ -30,22 +29,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
         ButterKnife.bind(this);
-        manager.bind(this);
-        listView.setAdapter(manager.getAdapter());
-        getSupportLoaderManager().initLoader(0, null, manager);
+        taskManager.bind(this);
+        listView.setAdapter(taskManager.getAdapter());
+        getSupportLoaderManager().initLoader(0, null, taskManager);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        manager.unbind();
+        taskManager.unbind();
     }
 
     public void onAddClick(View view) {
         String text = newTask.getText().toString();
         if (!text.isEmpty()) {
             newTask.setText("");
-            manager.addTask(text);
+            taskManager.addTask(text);
         }
     }
 
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         TextView taskName = (TextView) parent.findViewById(R.id.task);
         CheckBox checkBox = (CheckBox) parent.findViewById(R.id.task_done);
         ToggleButton star = (ToggleButton) parent.findViewById(R.id.star);
-        manager.updateTask((int) parent.getTag(), taskName.getText().toString(), null, checkBox.isChecked(), star.isChecked());
+        taskManager.updateTask((int) parent.getTag(), taskName.getText().toString(), null, checkBox.isChecked(), star.isChecked());
     }
 
     public void onTextClick(View view) {
@@ -71,13 +70,30 @@ public class MainActivity extends AppCompatActivity {
         final EditText taskName = (EditText) dialogView.findViewById(R.id.task_name);
         taskName.setText(task.getText().toString());
         final EditText taskDescription = (EditText) dialogView.findViewById(R.id.task_description);
-        taskDescription.setText(manager.getDescription(position));
+        taskDescription.setText(taskManager.getDescription(position));
         TextView date = (TextView) dialogView.findViewById(R.id.creation_date);
         date.setText(d.getText().toString());
         final CheckBox done = (CheckBox) dialogView.findViewById(R.id.task_done);
         done.setChecked(checkBox.isChecked());
         final ToggleButton star = (ToggleButton) dialogView.findViewById(R.id.star);
         star.setChecked(toggleButton.isChecked());
+
+
+        ListView listView = (ListView) dialogView.findViewById(R.id.tags);
+        final TagManager tagManager = new TagManager(position);
+        tagManager.bind(this);
+        listView.setAdapter(tagManager.getAdapter());
+        getSupportLoaderManager().restartLoader(1, null, tagManager);
+
+        Button aggTag = (Button) dialogView.findViewById(R.id.add_tag);
+        aggTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText text = (EditText) dialogView.findViewById(R.id.new_tag);
+                tagManager.addTag(position, text.getText().toString());
+            }
+        });
+
 
         dialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -86,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.write_smth, Toast.LENGTH_SHORT).show();
                 } else {
                     String newDescription = taskDescription.getText().toString();
-                    manager.updateTask(position, newText, newDescription, done.isChecked(), star.isChecked());
+                    taskManager.updateTask(position, newText, newDescription, done.isChecked(), star.isChecked());
                 }
             }
         });

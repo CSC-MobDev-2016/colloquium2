@@ -6,4 +6,5 @@
     <string name="cancel">Return without saving</string>
     <string name="make_done">Mark as done</string>
     <string name="write_smth">Please fill in your task</string>
+    <string name="delete">Delete</string>
 </resources>
