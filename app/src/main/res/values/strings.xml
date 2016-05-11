@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">colloquium2</string>
+    <string name="add_task">Add task</string>
+    <string name="add_tag">Add tag</string>
+    <string name="app_name">To Do</string>
+    <string name="favorite">Favorite</string>
+    <string name="completed">Completed</string>
+    <string name="save">Save</string>
+    <string name="add_task_hint">Enter task text</string>
+    <string name="add_task_title_hint">Enter task title</string>
+    <string name="add_tag_hint">Enter tag</string>
+    <string name="fav_description">Favorite icon</string>
 </resources>
