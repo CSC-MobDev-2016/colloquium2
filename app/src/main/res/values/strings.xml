@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">colloquium2</string>
+    <string name="app_name">Todo List</string>
+    <string name="title_item_detail">Task Detail</string>
+    <string name="date_format">yyyy/MM/dd HH:mm</string>
 </resources>
